@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Data;
 using System.Windows.Forms;
 using LibraryLoanSystem.DataAccess;
@@ -25,6 +25,8 @@ namespace LibraryLoanSystem.Forms
 
             InputValidationHelper.AttachText(txtTitle, 200);
             InputValidationHelper.AttachNumeric(txtStock, 6);
+            // initialize button states
+            ClearForm();
         }
 
         private void LoadAuthors()
@@ -70,6 +72,10 @@ namespace LibraryLoanSystem.Forms
             if (cmbCategories.Items.Count > 0) cmbCategories.SelectedIndex = 0;
 
             txtTitle.Focus();
+            // reset action buttons: allow adding, disable update/delete when no selection
+            btnAdd.Enabled = true;
+            btnUpdate.Enabled = false;
+            btnDelete.Enabled = false;
         }
 
         private bool ValidateForm()
@@ -201,6 +207,10 @@ namespace LibraryLoanSystem.Forms
 
             cmbAuthors.Text = authorName;
             cmbCategories.Text = categoryName;
+            // when a row is selected, disable Add to prevent accidental duplicate insert
+            btnAdd.Enabled = false;
+            btnUpdate.Enabled = true;
+            btnDelete.Enabled = true;
         }
     }
 }

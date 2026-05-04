@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using LibraryLoanSystem.DataAccess;
 using Microsoft.Data.SqlClient;
@@ -20,6 +20,8 @@ namespace LibraryLoanSystem.Forms
 
             LoadCategories();
             InputValidationHelper.AttachText(txtName, 200);
+            // initialize button states
+            ClearForm();
         }
 
         private void LoadCategories()
@@ -33,6 +35,10 @@ namespace LibraryLoanSystem.Forms
             _selectedCategoryId = 0;
             txtName.Clear();
             txtName.Focus();
+            // reset action buttons: allow adding, disable update/delete when no selection
+            btnAdd.Enabled = true;
+            btnUpdate.Enabled = false;
+            btnDelete.Enabled = false;
         }
 
         private bool ValidateForm()
@@ -122,6 +128,10 @@ namespace LibraryLoanSystem.Forms
             var row = dgvCategories.Rows[e.RowIndex];
             _selectedCategoryId = Convert.ToInt32(row.Cells["CategoryId"].Value);
             txtName.Text = row.Cells["Name"].Value.ToString();
+            // when a row is selected, disable Add to prevent accidental duplicate insert
+            btnAdd.Enabled = false;
+            btnUpdate.Enabled = true;
+            btnDelete.Enabled = true;
         }
     }
 }
